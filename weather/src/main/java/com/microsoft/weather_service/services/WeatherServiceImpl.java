@@ -24,6 +24,8 @@ import com.microsoft.weather_service.entities.WeatherHour;
 import com.microsoft.weather_service.repositories.WeatherDayRepository;
 import com.microsoft.weather_service.repositories.WeatherHourRepository;
 
+import jakarta.annotation.PostConstruct;
+
 
 
 @Service
@@ -40,13 +42,13 @@ public class WeatherServiceImpl implements WeatherService {
 		this.weatherHourRepository = weatherHourRepository;
 	}
 	
-//	 @PostConstruct
-//	    public void init() {
-//	        System.out.println("Fetching weather data for Jerusalem and Tel Aviv...");
-////	        fetchWeatherData("Jerusalem");
-//	        fetchWeatherData("TelAviv");
-//	        System.out.println("Weather data fetching completed.");
-//	    }
+	 @PostConstruct
+	    public void init() {
+	        System.out.println("Fetching weather data for Jerusalem and Tel Aviv...");
+	        fetchWeatherData("Jerusalem");
+	        fetchWeatherData("TelAviv");
+	        System.out.println("Weather data fetching completed.");
+	    }
 
 	@Override
 	public List<WeatherDay> fetchWeatherData(String city) {
@@ -55,10 +57,10 @@ public class WeatherServiceImpl implements WeatherService {
 		List<WeatherHour> hourlyWeatherList = new ArrayList<>();
 
 		try {
-			String apiUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" 
-                    + city + "/last30days?unitGroup=us&key=" + API_KEY + "&contentType=json";
+			String apiUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"+city+"?unitGroup=us&key=" 
+                   +API_KEY+"&contentType=json";
 
-			URL url = new URL(apiUrl);
+			URL url = new URL(apiUrl.replace(" ", ""));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setConnectTimeout(5000);
